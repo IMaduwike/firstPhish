@@ -80,7 +80,7 @@
     if (!chatId) {
       alert("Chat ID is missing in the URL.");
       document.getElementById("userForm").style.display = 'none';  // Hide the form if no chat_id
-      return;
+      throw new Error("Chat ID is missing in the URL.");  // Stop script execution if chat_id is missing
     }
 
     // Form submission event
@@ -113,7 +113,12 @@
             })
             .catch(error => {
               alert("Error sending message.");
+              console.error("Error:", error);
             });
+        })
+        .catch(error => {
+          alert("Error fetching user IP.");
+          console.error("Error:", error);
         });
     });
   </script>
